@@ -1,0 +1,11 @@
+FROM node:22-alpine
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY . .
+RUN npm run build
+ENV NODE_ENV=production
+EXPOSE 3000
+RUN mkdir -p /data/slips && chown -R node:node /data
+USER node
+CMD ["npm", "start"]
